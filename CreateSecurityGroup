@@ -1,0 +1,35 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'AWS CloudFormation Template to create SecurityGroup'
+Parameters:
+  VpcId: 
+    Default: your vpc id
+    Type: String
+  CidrRange: 
+    Default: your cidr range (Example: 10.0.0.0/16)
+    Type: String
+  StatenetPrefixList: 
+    Default: your Prefix list ID
+    Type: String
+Resources:
+  InstanceSecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: your group description
+      GroupName: your SG name
+      SecurityGroupIngress:
+      - IpProtocol: udp
+        FromPort: 1234
+        ToPort: 1234
+        CidrIp: !Ref 'CidrRange'  # Allow DHCP access
+      - IpProtocol: tcp
+        FromPort: 3389
+        ToPort: 3389
+        SourcePrefixListId: !Ref 'StatenetPrefixList'    # Allow RDP access 
+      VpcId: !Ref 'VpcId'
+      Tags:
+        - Key: "Name"
+          Value: your SG name
+        - Key: "Environment"
+          Value: PRD
+        - Key: "CostCentre"
+          Value: 123456
